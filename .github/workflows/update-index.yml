@@ -1,0 +1,59 @@
+name: Update index
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'morning/**.html'
+      - 'evening/**.html'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate index.html
+        run: |
+          cat > index.html <<'HEAD'
+          <!DOCTYPE html>
+          <html lang="ja">
+          <head>
+          <meta charset="UTF-8">
+          <title>Daily Briefing — Archive</title>
+          <style>
+            body { font-family: "Crimson Pro", Georgia, serif; background: #f4ede0;
+                   color: #1f1a14; max-width: 720px; margin: 0 auto; padding: 64px 32px; }
+            h1 { font-family: "DM Serif Display", serif; font-size: 3rem; margin: 0 0 8px; }
+            .sub { font-style: italic; color: #7a6b54; margin-bottom: 48px; }
+            ul { list-style: none; padding: 0; }
+            li { padding: 12px 0; border-bottom: 1px solid #c4b393; }
+            a { color: #8b1e1e; text-decoration: none; }
+            a:hover { text-decoration: underline; }
+            .date { font-family: "JetBrains Mono", monospace; font-size: 0.85rem;
+                    color: #7a6b54; margin-right: 12px; }
+          </style>
+          </head>
+          <body>
+          <h1>Daily Briefing</h1>
+          <p class="sub">A tech briefing — geechが喜びそうなニュースを、コーヒーと共に</p>
+          <h2>朝刊</h2>
+          <ul>
+          HEAD
+          for f in $(ls -r morning/*.html 2>/dev/null); do
+            d=$(basename "$f" .html)
+            echo "<li><span class='date'>$d</span><a href='$f'>朝刊</a></li>" >> index.html
+          done
+          echo "</ul><h2>夕刊</h2><ul>" >> index.html
+          for f in $(ls -r evening/*.html 2>/dev/null); do
+            d=$(basename "$f" .html)
+            echo "<li><span class='date'>$d</span><a href='$f'>夕刊</a></li>" >> index.html
+          done
+          echo "</ul></body></html>" >> index.html
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --staged --quiet || git commit -m "auto: update index"
+          git push
