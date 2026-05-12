@@ -5,6 +5,7 @@ on:
     paths:
       - 'morning/**.html'
       - 'evening/**.html'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -20,18 +21,25 @@ jobs:
           <html lang="ja">
           <head>
           <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>Daily Briefing — Archive</title>
           <style>
             body { font-family: "Crimson Pro", Georgia, serif; background: #f4ede0;
                    color: #1f1a14; max-width: 720px; margin: 0 auto; padding: 64px 32px; }
             h1 { font-family: "DM Serif Display", serif; font-size: 3rem; margin: 0 0 8px; }
             .sub { font-style: italic; color: #7a6b54; margin-bottom: 48px; }
+            h2 { font-family: "DM Serif Display", serif; font-size: 1.6rem;
+                 border-bottom: 2px solid #1f1a14; padding-bottom: 6px; margin-top: 48px; }
             ul { list-style: none; padding: 0; }
-            li { padding: 12px 0; border-bottom: 1px solid #c4b393; }
+            li { padding: 16px 0; border-bottom: 1px solid #c4b393; }
+            li.empty { color: #7a6b54; font-style: italic; border-bottom: none; }
             a { color: #8b1e1e; text-decoration: none; }
             a:hover { text-decoration: underline; }
-            .date { font-family: "JetBrains Mono", monospace; font-size: 0.85rem;
-                    color: #7a6b54; margin-right: 12px; }
+            .date { font-family: "JetBrains Mono", monospace; font-size: 0.8rem;
+                    color: #7a6b54; margin-right: 12px; letter-spacing: 0.04em; }
+            .title { font-family: "DM Serif Display", serif; font-size: 1.15rem; }
+            .lede { font-size: 0.95rem; color: #4a3f2f; line-height: 1.55;
+                    margin: 8px 0 0; }
           </style>
           </head>
           <body>
@@ -40,15 +48,32 @@ jobs:
           <h2>朝刊</h2>
           <ul>
           HEAD
-          for f in $(ls -r morning/*.html 2>/dev/null); do
-            d=$(basename "$f" .html)
-            echo "<li><span class='date'>$d</span><a href='$f'>朝刊</a></li>" >> index.html
-          done
+
+          render_entries() {
+            local dir="$1"
+            local label="$2"
+            local found=0
+            for f in $(ls -r "$dir"/*.html 2>/dev/null); do
+              found=1
+              local d=$(basename "$f" .html)
+              local desc=$(grep -oE 'property="og:description" content="[^"]*"' "$f" | head -1 | sed 's/.*content="//;s/"$//')
+              {
+                echo "<li>"
+                echo "  <div><span class=\"date\">$d</span><a class=\"title\" href=\"$f\">$label</a></div>"
+                if [ -n "$desc" ]; then
+                  echo "  <p class=\"lede\">$desc</p>"
+                fi
+                echo "</li>"
+              } >> index.html
+            done
+            if [ "$found" = "0" ]; then
+              echo "<li class=\"empty\">まだありません</li>" >> index.html
+            fi
+          }
+
+          render_entries morning 朝刊
           echo "</ul><h2>夕刊</h2><ul>" >> index.html
-          for f in $(ls -r evening/*.html 2>/dev/null); do
-            d=$(basename "$f" .html)
-            echo "<li><span class='date'>$d</span><a href='$f'>夕刊</a></li>" >> index.html
-          done
+          render_entries evening 夕刊
           echo "</ul></body></html>" >> index.html
       - name: Commit
         run: |
