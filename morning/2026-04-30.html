@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>朝刊 — 2026年4月30日(木) | A Tech Briefing</title>
+
+<meta property="og:title" content="朝刊 — 2026年4月30日(木) | A Tech Briefing">
+<meta property="og:description" content="セキュリティ、DB、Linux、Web、AI — geechが喜びそうなニュース。今日のトップは GitHub の git push 一発 RCE 脆弱性 (CVE-2026-3854)。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mkonagaya.github.io/daily-briefing/morning/2026-04-30.html">
+<meta property="og:image" content="https://mkonagaya.github.io/daily-briefing/assets/og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="朝刊 — 2026年4月30日(木) | A Tech Briefing">
+<meta name="twitter:description" content="セキュリティ、DB、Linux、Web、AI — geechが喜びそうなニュース。今日のトップは GitHub の git push 一発 RCE 脆弱性 (CVE-2026-3854)。">
+<meta name="twitter:image" content="https://mkonagaya.github.io/daily-briefing/assets/og-cover.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+JP:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4ede0; --bg-alt: #ebe1cd; --ink: #1f1a14; --ink-soft: #4a3f2f;
+    --ink-mute: #7a6b54; --accent: #8b1e1e; --accent-gold: #8a6f1d;
+    --rule: #c4b393; --rule-soft: #d9ccaf; --highlight: rgba(139, 30, 30, 0.08);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink);
+    font-family: "Crimson Pro", "Noto Serif JP", Georgia, serif; font-size: 17px;
+    line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  body::before { content: ""; position: fixed; inset: 0; pointer-events: none;
+    background-image: radial-gradient(circle at 25% 30%, rgba(139, 110, 60, 0.04) 0%, transparent 40%),
+                      radial-gradient(circle at 75% 70%, rgba(139, 110, 60, 0.05) 0%, transparent 50%);
+    z-index: 0; }
+  .paper { position: relative; z-index: 1; max-width: 880px; margin: 0 auto; padding: 48px 32px 96px; }
+  .masthead { text-align: center; border-top: 4px double var(--ink); border-bottom: 4px double var(--ink); padding: 22px 0 18px; margin-bottom: 32px; }
+  .masthead-eyebrow { font-family: "Crimson Pro", serif; font-style: italic; font-size: 0.85rem; letter-spacing: 0.18em; color: var(--ink-soft); text-transform: uppercase; margin-bottom: 6px; }
+  .masthead-title { font-family: "DM Serif Display", "Noto Serif JP", serif; font-size: clamp(3.4rem, 9vw, 5.4rem); line-height: 1; letter-spacing: 0.02em; margin: 0; color: var(--ink); }
+  .masthead-meta { margin-top: 14px; display: flex; justify-content: space-between; align-items: center; font-family: "Crimson Pro", serif; font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); border-top: 1px solid var(--rule); padding-top: 10px; }
+  .masthead-meta span:nth-child(2) { font-style: italic; text-transform: none; letter-spacing: 0.04em; }
+  .lead { margin-bottom: 48px; padding-bottom: 36px; border-bottom: 1px solid var(--rule); }
+  .lead-kicker { display: inline-block; font-family: "Crimson Pro", serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); background: var(--highlight); padding: 4px 10px; margin-bottom: 14px; border: 1px solid var(--accent); }
+  .lead h2 { font-family: "DM Serif Display", "Noto Serif JP", serif; font-size: clamp(1.8rem, 4.2vw, 2.6rem); line-height: 1.18; margin: 0 0 18px; color: var(--ink); letter-spacing: -0.005em; }
+  .lead-deck { font-family: "Crimson Pro", "Noto Serif JP", serif; font-style: italic; font-size: 1.12rem; line-height: 1.6; color: var(--ink-soft); margin: 0 0 22px; padding-left: 16px; border-left: 3px solid var(--accent-gold); }
+  .lead-body p { margin: 0 0 14px; }
+  .lead-body p:first-of-type::first-letter { font-family: "DM Serif Display", "Noto Serif JP", serif; font-size: 4.6rem; line-height: 0.85; float: left; margin: 6px 10px 0 0; color: var(--accent); }
+  .lead-body ul { padding-left: 20px; margin: 14px 0; }
+  .lead-body ul li { margin-bottom: 6px; }
+  .source-line { margin-top: 18px; font-family: "Crimson Pro", serif; font-style: italic; font-size: 0.92rem; color: var(--ink-mute); }
+  .section-banner { text-align: center; margin: 42px 0 22px; position: relative; }
+  .section-banner-text { display: inline-block; font-family: "DM Serif Display", "Noto Serif JP", serif; font-size: 1.1rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--ink-soft); padding: 0 24px; background: var(--bg); position: relative; z-index: 1; }
+  .section-banner::before { content: ""; position: absolute; top: 50%; left: 0; right: 0; height: 3px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); z-index: 0; }
+  details { border-bottom: 1px solid var(--rule); padding: 0; margin: 0; transition: background 0.2s ease; }
+  details:first-of-type { border-top: 1px solid var(--rule); }
+  details[open] { background: linear-gradient(to bottom, transparent, rgba(139, 110, 60, 0.04)); }
+  summary { cursor: pointer; list-style: none; padding: 22px 8px 22px 4px; display: flex; align-items: baseline; gap: 16px; user-select: none; transition: color 0.15s ease; }
+  summary::-webkit-details-marker { display: none; }
+  summary:hover { color: var(--accent); }
+  summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .sec-icon { font-size: 1.4rem; flex-shrink: 0; width: 1.8em; text-align: center; }
+  .sec-title { font-family: "DM Serif Display", "Noto Serif JP", serif; font-size: clamp(1.3rem, 3vw, 1.7rem); line-height: 1.2; flex: 1; letter-spacing: 0.01em; }
+  .sec-count { font-family: "JetBrains Mono", monospace; font-size: 0.78rem; color: var(--ink-mute); letter-spacing: 0.05em; flex-shrink: 0; }
+  .sec-indicator { width: 28px; height: 28px; border: 1px solid var(--ink-soft); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Crimson Pro", serif; font-size: 1.1rem; line-height: 1; color: var(--ink-soft); transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease; flex-shrink: 0; }
+  details[open] .sec-indicator { transform: rotate(45deg); background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .sec-body { padding: 4px 8px 32px 60px; animation: fadeSlide 0.35s ease; }
+  @keyframes fadeSlide { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  .sec-body article { padding: 14px 0; border-bottom: 1px dotted var(--rule-soft); }
+  .sec-body article:last-child { border-bottom: none; padding-bottom: 0; }
+  .sec-body h3 { font-family: "Noto Serif JP", "DM Serif Display", serif; font-weight: 700; font-size: 1.08rem; line-height: 1.4; margin: 0 0 8px; color: var(--ink); }
+  .sec-body p { margin: 0 0 8px; line-height: 1.65; }
+  .sec-body .meta { font-family: "Crimson Pro", serif; font-style: italic; font-size: 0.88rem; color: var(--ink-mute); }
+  @media (max-width: 600px) {
+    .paper { padding: 28px 18px 64px; }
+    .masthead-meta { flex-direction: column; gap: 6px; }
+    .sec-body { padding-left: 8px; }
+    summary { padding: 18px 4px; gap: 10px; }
+    .sec-icon { width: 1.4em; }
+    .lead-body p:first-of-type::first-letter { font-size: 3.6rem; }
+  }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(139, 30, 30, 0.35); transition: background 0.15s ease, border-color 0.15s ease; }
+  a:hover { background: var(--highlight); border-bottom-color: var(--accent); }
+  strong { font-weight: 700; color: var(--ink); }
+  em { font-style: italic; color: var(--ink-soft); }
+  code { font-family: "JetBrains Mono", monospace; font-size: 0.88em; background: var(--bg-alt); padding: 1px 5px; border-radius: 3px; }
+  .colophon { margin-top: 56px; padding-top: 24px; border-top: 4px double var(--ink); text-align: center; font-family: "Crimson Pro", serif; font-style: italic; font-size: 0.82rem; letter-spacing: 0.08em; color: var(--ink-mute); }
+  .colophon-mark { display: inline-block; margin: 0 12px; color: var(--accent-gold); }
+  .toolbar { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px; font-family: "Crimson Pro", serif; font-size: 0.85rem; }
+  .toolbar button { background: transparent; color: var(--ink-soft); border: 1px solid var(--rule); padding: 5px 12px; cursor: pointer; font-family: inherit; font-size: inherit; letter-spacing: 0.05em; transition: all 0.15s ease; }
+  .toolbar button:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="paper">
+
+  <div class="toolbar">
+    <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">展開</button>
+    <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">折りたたむ</button>
+  </div>
+
+  <header class="masthead">
+    <div class="masthead-eyebrow">A Tech Briefing · Daily Edition</div>
+    <h1 class="masthead-title">朝刊</h1>
+    <div class="masthead-meta">
+      <span>2026年4月30日(木)</span>
+      <span>"Geechが喜びそうなニュースを、コーヒーと共に"</span>
+      <span>Tech Edition</span>
+    </div>
+  </header>
+
+  <article class="lead">
+    <span class="lead-kicker">🔥 今日の一押し</span>
+    <h2>GitHub に CVSS 8.7 のRCE脆弱性<br>「git push 一発」で任意コード実行可能だった</h2>
+    <p class="lead-deck">
+      Wiz が3月に発見、GitHub が修正済み (CVE-2026-3854)。push option の値が内部サービスヘッダーで適切にエスケープされていなかったコマンドインジェクション。GitHub.com と Enterprise Server 双方が影響。
+    </p>
+    <div class="lead-body">
+      <p>
+        push 権限を持つ攻撃者が <code>git push</code> 一発で GitHub のインスタンス上で任意コード実行できる、というクラスの脆弱性。<strong>原因は内部ヘッダーフォーマットで使われていたデリミタ文字が、ユーザー入力にも出現し得るものだった</strong>こと。crafted な push option を投げることで内部ヘッダーに追加メタデータフィールドを注入できた、というのが GitHub Advisory での説明。
+      </p>
+      <p>
+        GitHub.com 側は既に修正済み、Enterprise Server を自前で運用している現場は要パッチ確認。Wiz が3月4日に報告、GitHub が検証して修正をデプロイ、という標準的な responsible disclosure フロー。
+      </p>
+      <p><em>geech的に重要なポイント:</em></p>
+      <ul>
+        <li><strong>「内部処理の区切り文字とユーザー入力のサニタイズ漏れ」</strong>という古典的なバグが、現代の最重要インフラの中心で起きている。CSV injectionや command injection の系譜。</li>
+        <li>ZipAir LCC のように <strong>GitHub Enterprise Server をオンプレで運用しているケース</strong> はクライアント側のIT部門にパッチ状況の確認を投げておくと安全。</li>
+        <li>「push 権限を持つ攻撃者」がトリガなので、組織内の侵害済みアカウントから横展開される可能性。MFA徹底とアクセス監査の重要性が改めて。</li>
+      </ul>
+      <p class="source-line">出典: <a href="https://thehackernews.com/" target="_blank" rel="noopener">The Hacker News</a> / <a href="https://github.com/advisories" target="_blank" rel="noopener">GitHub Advisory Database</a> / <a href="https://www.wiz.io/blog" target="_blank" rel="noopener">Wiz Blog</a></p>
+    </div>
+  </article>
+
+  <div class="section-banner">
+    <span class="section-banner-text">本日の見出し</span>
+  </div>
+
+  <!-- ─── SECURITY ─────────────────────────── -->
+  <details open>
+    <summary>
+      <span class="sec-icon">🔒</span>
+      <span class="sec-title">セキュリティ</span>
+      <span class="sec-count">5 stories</span>
+      <span class="sec-indicator">+</span>
+    </summary>
+    <div class="sec-body">
+      <article>
+        <h3>VECT 2.0 ランサムウェア、暗号化失敗で「事実上のワイパー」化</h3>
+        <p>Check Point Research の解析。<strong>131KB を超える大半のエンタープライズファイルを、復号不能な状態で破壊</strong>するバグが Windows / Linux / ESXi 全バリアントの暗号化実装にあった。攻撃者自身も復号鍵を持っていないため、身代金を払っても復旧不可能。「VECTインシデントでは支払いは復旧戦略にならない」(Eli Smadja, Check Point)。</p>
+        <p class="meta">出典: <a href="https://thehackernews.com/" target="_blank" rel="noopener">The Hacker News</a> / <a href="https://research.checkpoint.com/" target="_blank" rel="noopener">Check Point Research</a></p>
+      </article>
+      <article>
+        <h3>CISA が KEV に2件追加 — ConnectWise ScreenConnect と Windows Shell</h3>
+        <p>CVE-2024-1708 (CVSS 8.4、ScreenConnect path traversal、2024年2月修正済み) と CVE-2026-32202 (CVSS 4.3、Windows Shell スプーフィング、4月修正)。後者は前日に Microsoft がアドバイザリを更新して active exploitation を認めたところ。</p>
+        <p class="meta">出典: <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA KEV Catalog</a> / <a href="https://thehackernews.com/" target="_blank" rel="noopener">The Hacker News</a></p>
+      </article>
+      <article>
+        <h3>cPanel に重大な認証バイパス脆弱性 — Namecheap が緊急パッチ</h3>
+        <p>4月29日 02:42 UTC までに Namecheap Reseller、Stellar Business サーバー全台にパッチ適用完了との発表。Web ホスティング業界全般で要対応。</p>
+        <p class="meta">出典: <a href="https://thehackernews.com/2026/04/critical-cpanel-authentication.html" target="_blank" rel="noopener">The Hacker News</a></p>
+      </article>
+      <article>
+        <h3>LiteLLM ゲートウェイに critical 脆弱性 (CVE-2026-42208) — 実環境で悪用観測</h3>
+        <p>OSSの LLM ゲートウェイ。攻撃者が LLM 関連の機密情報 (APIキー、プロンプト、レスポンス) を窃取。Konaの「Claude Code を sparring partner」運用でも、もし社内に LLM Gateway を立てる場合は監視・パッチ運用必須。</p>
+        <p class="meta">出典: <a href="https://www.bleepingcomputer.com/" target="_blank" rel="noopener">BleepingComputer</a></p>
+      </article>
+      <article>
+        <h3>Microsoft、Outlook 障害後 iPhone ユーザーに再認証を要請</h3>
+        <p>4/27〜28の大規模障害の収束後、iPhone ユーザーには認証情報の再入力を求める異例の対応。アカウント侵害の連鎖を防ぐ目的か。</p>
+        <p class="meta">出典: <a href="https://www.bleepingcomputer.com/" target="_blank" rel="noopener">BleepingComputer</a> / <a href="https://status.cloud.microsoft/" target="_blank" rel="noopener">Microsoft 365 Status</a></p>
+      </article>
+    </div>
+  </details>
+
+  <!-- ─── DATABASE ──────────────────────────── -->
+  <details open>
+    <summary>
+      <span class="sec-icon">🗄️</span>
+      <span class="sec-title">データベース</span>
+      <span class="sec-count">4 stories</span>
+      <span class="sec-indicator">+</span>
+    </summary>
+    <div class="sec-body">
+      <article>
+        <h3>Linux 7.0 が PostgreSQL の throughput を半減させた件、深掘り解説が出る</h3>
+        <p>The Coder Cafe が4月29日に詳細記事公開。<strong>原因は「shared_buffers 120GB = 約3,100万 minor page fault」 + spinlock 競合</strong>。PREEMPT_NONE 削除でロックホルダーがプリエンプトされやすくなった結果、StrategyGetBuffer 周辺の spinlock 待ちが爆発。Ubuntu 26.04 LTS が Linux 7.0 を載せて出るため、現場では <code>shared_buffers</code> サイズ調整 + huge pages 利用 + sysctl チューニングで凌ぐ運用が広がる。</p>
+        <p class="meta">出典: <a href="https://read.thecoder.cafe/p/linux-broke-postgresql" target="_blank" rel="noopener">The Coder Cafe</a> / <a href="https://www.phoronix.com/news/Linux-7.0-AWS-PostgreSQL-Drop" target="_blank" rel="noopener">Phoronix</a></p>
+      </article>
+      <article>
+        <h3>pgclone 4.0.0 リリース — pg_dump 不要のSQL経由クローン</h3>
+        <p>PostgreSQL拡張として動作。<strong>データマスキング内蔵、parallel background workers、フルDDLサポート</strong>。pg_dump/pg_restore や外部シェルスクリプトに依存しない設計。pgBackRest 終了の影響でバックアップ周りのOSS再編が進む中、注目度上昇中。PostgreSQL ライセンス。</p>
+        <p class="meta">出典: <a href="https://news.tuxmachines.org/n/2026/04/28/PostgreSQL_Databases_pgBackRest_orphaned_and_pgclone_4_0_0_rele.shtml" target="_blank" rel="noopener">Tux Machines</a> / <a href="https://www.postgresql.org/about/newsarchive/" target="_blank" rel="noopener">PostgreSQL News</a></p>
+      </article>
+      <article>
+        <h3>PGConf.BE 2026、5月5日にベルギー Leuven で開催</h3>
+        <p>PostgreSQL コミュニティカンファレンスがブリュッセル近郊で。EUのPostgreSQLコミュニティの規模感を見るのに最適。</p>
+        <p class="meta">出典: <a href="https://www.postgresql.org/about/newsarchive/" target="_blank" rel="noopener">PostgreSQL News</a></p>
+      </article>
+      <article>
+        <h3>Devart の dotConnect for PostgreSQL が EF Core 10 / AI Vector Types に対応</h3>
+        <p>.NET 系で PostgreSQL を使う現場には朗報。pgvector 系の AI 用途と Entity Framework が直結する流れ。</p>
+        <p class="meta">出典: <a href="https://www.postgresql.org/about/newsarchive/" target="_blank" rel="noopener">PostgreSQL News</a></p>
+      </article>
+    </div>
+  </details>
+
+  <!-- ─── OS ─────────────────────────── -->
+  <details open>
+    <summary>
+      <span class="sec-icon">🐧</span>
+      <span class="sec-title">OS / 低レイヤ</span>
+      <span class="sec-count">5 stories</span>
+      <span class="sec-indicator">+</span>
+    </summary>
+    <div class="sec-body">
+      <article>
+        <h3>Ubuntu 26.04 LTS "Resolute Raccoon" リリース — Linux 7.0 + GNOME 50</h3>
+        <p>5年サポートのLTS。ただし上記のPostgreSQL throughput半減問題を抱えた状態でのリリースとなり、DB運用者は kernel 6.x を pin するか、新しい sysctl/rseq mitigation を適用するかの判断が必要。</p>
+        <p class="meta">出典: <a href="https://news.tuxmachines.org/" target="_blank" rel="noopener">Tux Machines</a> / <a href="https://9to5linux.com/" target="_blank" rel="noopener">9to5Linux</a></p>
+      </article>
+      <article>
+        <h3>Linux 7.1-rc1 が リリース — 新NTFSドライバ、i486廃止</h3>
+        <p>Linus Torvalds が4月27日に7.1-rc1を公開。新しいNTFSドライバが大きな目玉、kernel tree 約4000万行に到達、i486 / 旧PCMCIA / Russia Baikal CPU の段階的廃止が進む。</p>
+        <p class="meta">出典: <a href="https://www.phoronix.com/" target="_blank" rel="noopener">Phoronix</a> / <a href="https://lwn.net/" target="_blank" rel="noopener">LWN.net</a></p>
+      </article>
+      <article>
+        <h3>Fedora Linux 44 リリース予告 — Linux 6.19、GNOME 50、KDE Plasma 6.6</h3>
+        <p>Workstation 版は GNOME 50 、KDE Plasma 版は新しい Plasma Login Manager をデフォルトに。Asahi Remix 44 (Apple Silicon 対応) も準備中で、M4 Pro 持ちにとっては将来の選択肢候補。</p>
+        <p class="meta">出典: <a href="https://news.tuxmachines.org/" target="_blank" rel="noopener">Tux Machines</a></p>
+      </article>
+      <article>
+        <h3>Canonical、将来の Ubuntu に LLM ベースのツールを統合する計画</h3>
+        <p>opt-in な実装、AI kill switch (オフにできるトグル) も用意するとのこと。OS 側に AI が降りてくる流れの典型例。</p>
+        <p class="meta">出典: <a href="https://news.tuxmachines.org/" target="_blank" rel="noopener">Tux Machines</a></p>
+      </article>
+      <article>
+        <h3>Framework Laptop 13 Pro 発表 — Linux ファースト、タッチスクリーン搭載</h3>
+        <p>修理可能性で評価される Framework が「Linux ファースト」を打ち出した新モデル。タッチスクリーン対応で、Linux デスクトップ用途の選択肢に。</p>
+        <p class="meta">出典: <a href="https://frame.work/blog" target="_blank" rel="noopener">Framework Blog</a> / <a href="https://news.tuxmachines.org/" target="_blank" rel="noopener">Tux Machines</a></p>
+      </article>
+    </div>
+  </details>
+
+  <!-- ─── WEB ────────────────────────── -->
+  <details open>
+    <summary>
+      <span class="sec-icon">🌐</span>
+      <span class="sec-title">Web / クラウド</span>
+      <span class="sec-count">4 stories</span>
+      <span class="sec-indicator">+</span>
+    </summary>
+    <div class="sec-body">
+      <article>
+        <h3>Microsoft、POP/IMAP の Legacy TLS 接続を 2026年7月から遮断</h3>
+        <p>Exchange Online のセキュリティ強化。古いメールクライアントを使い続けている社内システムは早めに対応必要。</p>
+        <p class="meta">出典: <a href="https://www.bleepingcomputer.com/" target="_blank" rel="noopener">BleepingComputer</a> / <a href="https://techcommunity.microsoft.com/" target="_blank" rel="noopener">Microsoft Tech Community</a></p>
+      </article>
+      <article>
+        <h3>三井住友FG、Sakana AI と組み「数時間で顧客企業に戦略提案」</h3>
+        <p>従来は数日〜数週間かかっていたエンタープライズ向け戦略提案を、生成AIで大幅に短縮。Sakana AI (元Google系の日本発AI研究所) の本格的な商業案件。</p>
+        <p class="meta">出典: <a href="https://www.nikkei.com/" target="_blank" rel="noopener">日本経済新聞</a></p>
+      </article>
+      <article>
+        <h3>Vimeo、Anodot 経由のサプライチェーン侵害を開示</h3>
+        <p>Anodot (データ異常検知) のセキュリティ侵害を経由して、Vimeo 顧客とユーザーの一部データが不正アクセスされた。SaaS 連鎖侵害の典型パターン。</p>
+        <p class="meta">出典: <a href="https://www.bleepingcomputer.com/" target="_blank" rel="noopener">BleepingComputer</a></p>
+      </article>
+      <article>
+        <h3>米Itron、社内 IT ネットワーク侵害を開示</h3>
+        <p>米国の電力・水道メーター大手。重要インフラへのサイバー攻撃の連鎖。OT/IT 境界のセキュリティが業界全体の課題に。</p>
+        <p class="meta">出典: <a href="https://www.bleepingcomputer.com/" target="_blank" rel="noopener">BleepingComputer</a></p>
+      </article>
+    </div>
+  </details>
+
+  <!-- ─── AI ───────────────────────── -->
+  <details open>
+    <summary>
+      <span class="sec-icon">🤖</span>
+      <span class="sec-title">AI</span>
+      <span class="sec-count">5 stories</span>
+      <span class="sec-indicator">+</span>
+    </summary>
+    <div class="sec-body">
+      <article>
+        <h3>Mag 7 決算: Alphabet と Amazon が AI で先行、Microsoft 苦戦、Meta は失速</h3>
+        <p><strong>Alphabet</strong> 純利益+81%、Google Cloud +63%増収 (4年ぶり高成長)、Backlog $4,600億。「我々は near-term で compute constrained」(Pichai)。<strong>Microsoft</strong> 売上+18% / 純利益+23%、AI事業の年間ランレート $370億 (前年比+123%)、ただし株価はピーク比2割安、AI新興勢に主力業務ソフトの革新で押されている。<strong>Amazon</strong> AWS +28%、純利益ほぼ倍。<strong>Meta</strong> 売上+33%(2021以来最速)、純利益+61%、しかしキャペックス未達 + DAP予想未達で時間外-7%。</p>
+        <p class="meta">出典: <a href="https://www.bloomberg.com/news/articles/2026-04-30/alphabet-amazon-outpace-meta-in-ai-during-earnings-bonanza" target="_blank" rel="noopener">Bloomberg</a> / <a href="https://www.cnbc.com/2026/04/29/alphabet-googl-q1-2026-earnings.html" target="_blank" rel="noopener">CNBC Alphabet</a> / <a href="https://www.cnbc.com/2026/04/29/meta-q1-earnings-report-2026.html" target="_blank" rel="noopener">CNBC Meta</a></p>
+      </article>
+      <article>
+        <h3>Microsoft の AI 競争「劣勢」鮮明に</h3>
+        <p>日経のシリコンバレー発記事。半年で AI 競争の勝ち組から劣勢に転落。主力業務ソフト (Office) に AI 新興勢が革新を持ち込む中、Microsoft は進化を見せられていない、との分析。Konaが ZipAir 等で関わる「業務ソフト × AI」領域の主導権がどこに移るか、要観察。</p>
+        <p class="meta">出典: <a href="https://www.nikkei.com/" target="_blank" rel="noopener">日本経済新聞</a></p>
+      </article>
+      <article>
+        <h3>Meta、AI に「全振り」キャペックス倍増 — 市場反応は冷ややか</h3>
+        <p>2026年AIインフラ投資ガイダンスを $1,150〜1,350億に。Q1業績好調だが、ユーザー数 (DAP) が予想を下回り「Iran でのインターネット途絶」が一因と説明。市場は AI 投資の規模に警戒感、時間外で-7%。</p>
+        <p class="meta">出典: <a href="https://www.nikkei.com/" target="_blank" rel="noopener">日本経済新聞</a> / <a href="https://www.cnbc.com/2026/04/29/meta-q1-earnings-report-2026.html" target="_blank" rel="noopener">CNBC</a></p>
+      </article>
+      <article>
+        <h3>2026年に脅威アクターが「カスタムAI」で攻撃自動化 — Picus Security 警告</h3>
+        <p>2月以降、攻撃者は <strong>Active Directory のマッピングと Domain Admin 認証情報の奪取を自律エージェントで分単位で実行</strong>するように。一方、防御側は CTI → Red Team → Blue Team の手動連携で日単位。「Autonomous Exposure Validation」というパラダイム提唱。</p>
+        <p class="meta">出典: <a href="https://thehackernews.com/" target="_blank" rel="noopener">The Hacker News</a> / <a href="https://www.picussecurity.com/" target="_blank" rel="noopener">Picus Security</a></p>
+      </article>
+      <article>
+        <h3>OpenAI vs Musk(xAI) 訴訟、陪審員選定継続中</h3>
+        <p>4月27日から開始。AI 業界の主要プレイヤーの権力闘争が法廷へ。長期化必至。</p>
+        <p class="meta">出典: <a href="https://www.reuters.com/legal/" target="_blank" rel="noopener">Reuters Legal</a></p>
+      </article>
+    </div>
+  </details>
+
+  <!-- ─── Other Geech ──────────────────────── -->
+  <details>
+    <summary>
+      <span class="sec-icon">🧠</span>
+      <span class="sec-title">その他geech案件</span>
+      <span class="sec-count">3 stories</span>
+      <span class="sec-indicator">+</span>
+    </summary>
+    <div class="sec-body">
+      <article>
+        <h3>Greg Kroah-Hartman 関連の動向 — Linux stable kernel 維持の話題</h3>
+        <p>Linux stable kernel 系列のメンテナとして著名な Greg KH の動向が 9to5Linux Weekly Roundup でも触れられる。OSS 運営の継続性問題 (pgBackRest 終了の文脈とも繋がる) を考える上で要注目。</p>
+        <p class="meta">出典: <a href="https://9to5linux.com/" target="_blank" rel="noopener">9to5Linux Weekly Roundup</a></p>
+      </article>
+      <article>
+        <h3>libzupt — ML-KEM-768 + X25519 のポスト量子ハイブリッド暗号 OSS</h3>
+        <p>Cristian Cezar Moisés の Zupt initiative 発、ファイルとバイナリデータの暗号化を post-quantum hybrid 方式で簡単に導入できるライブラリ。NIST PQC 標準 (ML-KEM = Kyber) の実用ライブラリが増えている流れ。</p>
+        <p class="meta">出典: <a href="https://news.tuxmachines.org/" target="_blank" rel="noopener">Tux Machines</a></p>
+      </article>
+      <article>
+        <h3>IPFire 2.29 Core Update 201、DNS Firewall 機能を追加</h3>
+        <p>IPFire を「ネットワーク門番」から「能動的脅威排除装置」に進化させる、DNS レベルのブロッキング機構が新規追加。家庭内 LAN ホビイストにも面白い変化。</p>
+        <p class="meta">出典: <a href="https://news.tuxmachines.org/" target="_blank" rel="noopener">Tux Machines</a></p>
+      </article>
+    </div>
+  </details>
+
+  <footer class="colophon">
+    <span class="colophon-mark">❦</span>
+    A Tech Briefing — April 30, 2026
+    <span class="colophon-mark">❦</span>
+  </footer>
+
+</div>
+</body>
+</html>

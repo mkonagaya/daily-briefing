@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <!-- Paper grain via subtle radial gradients -->
+    <radialGradient id="grain1" cx="25%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#8b6e3c" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#8b6e3c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="grain2" cx="75%" cy="70%" r="60%">
+      <stop offset="0%" stop-color="#8b6e3c" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#8b6e3c" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Vintage paper edge vignette -->
+    <radialGradient id="vignette" cx="50%" cy="50%" r="75%">
+      <stop offset="60%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#3a2f20" stop-opacity="0.12"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Paper base -->
+  <rect width="1200" height="630" fill="#f4ede0"/>
+  <rect width="1200" height="630" fill="url(#grain1)"/>
+  <rect width="1200" height="630" fill="url(#grain2)"/>
+  <rect width="1200" height="630" fill="url(#vignette)"/>
+
+  <!-- Outer thin frame for that printed-page feel -->
+  <rect x="32" y="32" width="1136" height="566" fill="none" stroke="#1f1a14" stroke-width="1.5" opacity="0.35"/>
+
+  <!-- Top double rule -->
+  <line x1="80" y1="100" x2="1120" y2="100" stroke="#1f1a14" stroke-width="3"/>
+  <line x1="80" y1="110" x2="1120" y2="110" stroke="#1f1a14" stroke-width="1"/>
+
+  <!-- Eyebrow line -->
+  <text x="600" y="170" text-anchor="middle"
+        font-family="'Crimson Pro', 'Times New Roman', serif"
+        font-style="italic" font-size="22"
+        letter-spacing="6"
+        fill="#4a3f2f">
+    A · TECH · BRIEFING · DAILY · EDITION
+  </text>
+
+  <!-- Hairline divider above title -->
+  <line x1="500" y1="195" x2="700" y2="195" stroke="#8a6f1d" stroke-width="1"/>
+
+  <!-- Main title 朝刊 (massive, masthead style) -->
+  <text x="600" y="395" text-anchor="middle"
+        font-family="'Noto Serif CJK JP', 'Noto Serif JP', serif"
+        font-weight="900"
+        font-size="240"
+        fill="#1f1a14"
+        letter-spacing="40">
+    朝刊
+  </text>
+
+  <!-- Romanized subtitle (newspaper-style) -->
+  <text x="600" y="475" text-anchor="middle"
+        font-family="'Crimson Pro', 'Times New Roman', serif"
+        font-style="italic"
+        font-size="28"
+        letter-spacing="8"
+        fill="#4a3f2f">
+    Asakan · The Morning Brief
+  </text>
+
+  <!-- Decorative ornament -->
+  <text x="600" y="510" text-anchor="middle"
+        font-family="'Crimson Pro', serif"
+        font-size="22"
+        fill="#8a6f1d">
+    ❦  ·  ❦  ·  ❦
+  </text>
+
+  <!-- Bottom double rule -->
+  <line x1="80" y1="525" x2="1120" y2="525" stroke="#1f1a14" stroke-width="1"/>
+  <line x1="80" y1="535" x2="1120" y2="535" stroke="#1f1a14" stroke-width="3"/>
+
+  <!-- Bottom meta line: tagline left + edition right -->
+  <text x="100" y="575"
+        font-family="'Noto Serif CJK JP', 'Crimson Pro', serif"
+        font-style="italic"
+        font-size="20"
+        fill="#7a6b54">
+    "Geechが喜びそうなニュースを、コーヒーと共に"
+  </text>
+
+  <text x="1100" y="575" text-anchor="end"
+        font-family="'Crimson Pro', serif"
+        font-size="18"
+        letter-spacing="4"
+        fill="#7a6b54">
+    EST. 2026
+  </text>
+
+  <!-- Tiny accent dot for color punch -->
+  <circle cx="600" cy="80" r="5" fill="#8b1e1e" opacity="0.7"/>
+</svg>
